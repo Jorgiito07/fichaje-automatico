@@ -1,11 +1,11 @@
-name: Fichaje prueba
+name: Fichaje prueba 30min
 
 on:
   schedule:
-    # Inicio ficticio a 10:10 España (09:10 UTC)
-    - cron: '10 9 * * 5'
-    # Stop ficticio a 10:15 España (09:15 UTC)
-    - cron: '15 9 * * 5'
+    # Inicio ficticio 09:50 UTC (10:50 España)
+    - cron: '50 9 * * 5'
+    # Stop 09:55 UTC (10:55 España)
+    - cron: '55 9 * * 5'
   workflow_dispatch:
     inputs:
       mode:
@@ -36,12 +36,13 @@ jobs:
             HOUR=$(date -u +"%H:%M")
             DAY=$(date -u +"%u")
 
-            if [[ "$DAY" -eq 5 && "$HOUR" == "09:10" ]]; then
+            if [[ "$DAY" -eq 5 && "$HOUR" == "09:50" ]]; then
               python fichaje.py start
-            elif [[ "$DAY" -eq 5 && "$HOUR" == "09:15" ]]; then
+            elif [[ "$DAY" -eq 5 && "$HOUR" == "09:55" ]]; then
               python fichaje.py stop
             fi
           fi
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
+
