@@ -2,7 +2,7 @@ name: Fichaje automático
 
 # Se ejecuta según el horario definido
 on:
-  workflow_dispatch:
+ workflow_dispatch:
     inputs:
       mode:
         description: 'start o stop'
