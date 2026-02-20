@@ -3,9 +3,9 @@ name: Fichaje prueba 30min
 on:
   schedule:
     # Inicio ficticio 09:50 UTC (10:50 España)
-    - cron: '50 9 * * 5'
+    - cron: '15 10 * * 5'
     # Stop 09:55 UTC (10:55 España)
-    - cron: '55 9 * * 5'
+    - cron: '20 10 * * 5'
   workflow_dispatch:
     inputs:
       mode:
