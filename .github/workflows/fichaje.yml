@@ -1,8 +1,7 @@
 name: Fichaje automático
 
-# Se ejecuta según el horario definido
 on:
- workflow_dispatch:
+  workflow_dispatch:
     inputs:
       mode:
         description: 'start o stop'
@@ -19,23 +18,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Descargar el repositorio
       - uses: actions/checkout@v4
 
-      # Configurar Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      # Instalar requests
-      - name: Instalar requests
+      - name: Install requests
         run: pip install requests
 
-      # Ejecutar script según horario
-       - name: Ejecutar fichaje manual o automático
+      - name: Ejecutar fichaje
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             python fichaje.py ${{ github.event.inputs.mode }}
           else
             HOUR=$(date -u +"%H:%M")
@@ -54,4 +49,3 @@ jobs:
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
-
