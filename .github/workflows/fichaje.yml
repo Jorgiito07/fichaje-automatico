@@ -2,14 +2,16 @@ name: Fichaje automático
 
 # Se ejecuta según el horario definido
 on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'start o stop'
+        required: true
+        default: 'stop'
   schedule:
-    # Lunes a jueves 08:30 España (07:30 UTC)
     - cron: '30 7 * * 1-4'
-    # Lunes a jueves 18:00 España (17:00 UTC)
     - cron: '0 17 * * 1-4'
-    # Viernes 08:00 España (07:00 UTC)
     - cron: '0 7 * * 5'
-    # Viernes 15:00 España (14:00 UTC)
     - cron: '0 14 * * 5'
 
 jobs:
@@ -31,21 +33,25 @@ jobs:
         run: pip install requests
 
       # Ejecutar script según horario
-      - name: Ejecutar fichaje
+       - name: Ejecutar fichaje manual o automático
         run: |
-          # Determinar la hora UTC de ejecución
-          HOUR=$(date -u +"%H:%M")
-          DAY=$(date -u +"%u")
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            python fichaje.py ${{ github.event.inputs.mode }}
+          else
+            HOUR=$(date -u +"%H:%M")
+            DAY=$(date -u +"%u")
 
-          if [[ "$DAY" -ge 1 && "$DAY" -le 4 && "$HOUR" == "07:30" ]]; then
-            python fichaje.py start
-          elif [[ "$DAY" -ge 1 && "$DAY" -le 4 && "$HOUR" == "17:00" ]]; then
-            python fichaje.py stop
-          elif [[ "$DAY" -eq 5 && "$HOUR" == "07:00" ]]; then
-            python fichaje.py start
-          elif [[ "$DAY" -eq 5 && "$HOUR" == "14:00" ]]; then
-            python fichaje.py stop
+            if [[ "$DAY" -ge 1 && "$DAY" -le 4 && "$HOUR" == "07:30" ]]; then
+              python fichaje.py start
+            elif [[ "$DAY" -ge 1 && "$DAY" -le 4 && "$HOUR" == "17:00" ]]; then
+              python fichaje.py stop
+            elif [[ "$DAY" -eq 5 && "$HOUR" == "07:00" ]]; then
+              python fichaje.py start
+            elif [[ "$DAY" -eq 5 && "$HOUR" == "14:00" ]]; then
+              python fichaje.py stop
+            fi
           fi
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
+
