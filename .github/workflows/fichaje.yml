@@ -1,0 +1,51 @@
+name: Fichaje automático
+
+# Se ejecuta según el horario definido
+on:
+  schedule:
+    # Lunes a jueves 08:30 España (07:30 UTC)
+    - cron: '30 7 * * 1-4'
+    # Lunes a jueves 18:00 España (17:00 UTC)
+    - cron: '0 17 * * 1-4'
+    # Viernes 08:00 España (07:00 UTC)
+    - cron: '0 7 * * 5'
+    # Viernes 15:00 España (14:00 UTC)
+    - cron: '0 14 * * 5'
+
+jobs:
+  fichaje:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Descargar el repositorio
+      - uses: actions/checkout@v4
+
+      # Configurar Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Instalar requests
+      - name: Instalar requests
+        run: pip install requests
+
+      # Ejecutar script según horario
+      - name: Ejecutar fichaje
+        run: |
+          # Determinar la hora UTC de ejecución
+          HOUR=$(date -u +"%H:%M")
+          DAY=$(date -u +"%u")
+
+          if [[ "$DAY" -ge 1 && "$DAY" -le 4 && "$HOUR" == "07:30" ]]; then
+            python fichaje.py start
+          elif [[ "$DAY" -ge 1 && "$DAY" -le 4 && "$HOUR" == "17:00" ]]; then
+            python fichaje.py stop
+          elif [[ "$DAY" -eq 5 && "$HOUR" == "07:00" ]]; then
+            python fichaje.py start
+          elif [[ "$DAY" -eq 5 && "$HOUR" == "14:00" ]]; then
+            python fichaje.py stop
+          fi
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
