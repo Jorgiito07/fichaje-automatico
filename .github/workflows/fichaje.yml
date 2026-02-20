@@ -1,17 +1,15 @@
 name: Fichaje automático
 
 on:
+  schedule:
+    - cron: '30 9 * * 5'   # 10:30 España = 9:30 UTC
+    - cron: '40 9 * * 5'   # 10:40 España = 9:40 UTC
   workflow_dispatch:
     inputs:
       mode:
         description: 'start o stop'
         required: true
         default: 'stop'
-  schedule:
-    - cron: '30 7 * * 1-4'
-    - cron: '0 17 * * 1-4'
-    - cron: '0 7 * * 5'
-    - cron: '0 14 * * 5'
 
 jobs:
   fichaje:
