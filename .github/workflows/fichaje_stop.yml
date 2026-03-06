@@ -5,7 +5,7 @@ on:
     # Lunes a Jueves a las 15:15 España (14:15 UTC)
     - cron: '15 14 * * 1-4'
     # Viernes a las 12:30 España (11:30 UTC)
-    - cron: '30 11 * * 5'
+    - cron: '00 13 * * 5'
   workflow_dispatch:
 
 jobs:
