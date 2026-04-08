@@ -2,10 +2,10 @@ name: Fichaje START
 
 on:
   schedule:
-    # Lunes a Jueves a las 07:30 España (05:30 UTC)
-    - cron: '30 5 * * 1-4'
-    # Viernes a las 07:00 España (05:00 UTC)
-    - cron: '0 5 * * 5'
+    # Lunes a Jueves a las 07:45 España (05:45 UTC)
+    - cron: '45 5 * * 1-4'
+    # Viernes a las 07:30 España (05:30 UTC)
+    - cron: '30 5 * * 5'
   workflow_dispatch:
 
 jobs:
